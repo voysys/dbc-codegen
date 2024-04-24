@@ -221,7 +221,7 @@ fn render_root_enum(mut w: impl Write, dbc: &DBC, config: &Config<'_>) -> Result
                     writeln!(
                         w,
                         "{} => Messages::{1}({1}::try_from(payload)?),",
-                        msg.message_id().0,
+                        msg.message_id().raw(),
                         type_name(msg.message_name())
                     )?;
                 }
@@ -242,7 +242,7 @@ fn render_root_enum(mut w: impl Write, dbc: &DBC, config: &Config<'_>) -> Result
 fn render_message(mut w: impl Write, config: &Config<'_>, msg: &Message, dbc: &DBC) -> Result<()> {
     writeln!(w, "/// {}", msg.message_name())?;
     writeln!(w, "///")?;
-    writeln!(w, "/// - ID: {0} (0x{0:x})", msg.message_id().0)?;
+    writeln!(w, "/// - ID: {0} (0x{0:x})", msg.message_id().raw())?;
     writeln!(w, "/// - Size: {} bytes", msg.message_size())?;
     if let can_dbc::Transmitter::NodeName(transmitter) = msg.transmitter() {
         writeln!(w, "/// - Transmitter: {}", transmitter)?;
@@ -274,7 +274,7 @@ fn render_message(mut w: impl Write, config: &Config<'_>, msg: &Message, dbc: &D
         writeln!(
             &mut w,
             "pub const MESSAGE_ID: u32 = {};",
-            msg.message_id().0
+            msg.message_id().raw()
         )?;
         writeln!(w)?;
 
@@ -623,7 +623,7 @@ fn render_set_signal(
                     writeln!(
                         w,
                         r##"return Err(CanError::ParameterOutOfRange {{ message_id: {message_id} }});"##,
-                        message_id = msg.message_id().0,
+                        message_id = msg.message_id().raw(),
                     )?;
                 }
                 writeln!(w, r"}}")?;
@@ -742,7 +742,7 @@ fn render_multiplexor_signal(
             writeln!(
                 &mut w,
                 "multiplexor => Err(CanError::InvalidMultiplexor {{ message_id: {}, multiplexor: multiplexor.into() }}),",
-                msg.message_id().0
+                msg.message_id().raw()
             )?;
         }
 
@@ -915,7 +915,7 @@ fn signal_to_payload(mut w: impl Write, signal: &Signal, msg: &Message) -> Resul
         writeln!(
             &mut w,
             "    .ok_or(CanError::ParameterOutOfRange {{ message_id: {} }})?;",
-            msg.message_id().0,
+            msg.message_id().raw(),
         )?;
         writeln!(
             &mut w,

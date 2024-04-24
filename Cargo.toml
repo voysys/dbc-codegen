@@ -18,7 +18,7 @@ rust-version = "1.73.0"
 std = []
 
 [dependencies]
-can-dbc = "5.0.0"
+can-dbc = { git = "https://github.com/voysys/can-dbc.git" }
 anyhow = "1.0.68"
 heck = "0.4.0"
 typed-builder = "0.18.0"
