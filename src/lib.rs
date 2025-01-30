@@ -614,7 +614,7 @@ fn render_set_signal(
     {
         let mut w = PadAdapter::wrap(&mut w);
 
-        if signal.signal_size != 1 {
+        if signal.signal_size != 1 && !(signal.min() == 0 && signal.max()) {
             if let FeatureConfig::Gated(gate) = config.check_ranges {
                 writeln!(w, r##"#[cfg(feature = {gate:?})]"##)?;
             }
